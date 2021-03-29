@@ -36,6 +36,5 @@ Gem::Specification.new do |s|
   s.add_dependency "activejob",     version
   s.add_dependency "activerecord",  version
 
-  s.add_dependency "marcel",    "~> 1.0.0"
-  s.add_dependency "mini_mime", "~> 1.0.2"
+  s.add_dependency "marcel", "~> 1.0.0"
 end

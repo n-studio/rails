@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "mini_mime"
-
 # A set of transformations that can be applied to a blob to create a variant. This class is exposed via
 # the ActiveStorage::Blob#variant method and should rarely be used directly.
 #
@@ -59,14 +57,14 @@ class ActiveStorage::Variation
 
   def format
     transformations.fetch(:format, :png).tap do |format|
-      if MiniMime.lookup_by_extension(format.to_s).nil?
+      if Marcel::MimeType.for(extension: format.to_s) == "application/octet-stream"
         raise ArgumentError, "Invalid variant format (#{format.inspect})"
       end
     end
   end
 
   def content_type
-    MiniMime.lookup_by_extension(format.to_s).content_type
+    Marcel::MimeType.for(extension: format.to_s)
   end
 
   # Returns a signed key for all the +transformations+ that this variation was instantiated with.
