@@ -47,7 +47,7 @@ module ActiveStorage
       #     has_one_attached :avatar, strict_loading: true
       #   end
       #
-      def has_one_attached(name, dependent: :purge_later, service: nil, strict_loading: false)
+      def has_one_attached(name, dependent: :purge_later, service: nil, strict_loading: false, attachment_class_name: "ActiveStorage::Attachment", blob_class_name: "ActiveStorage::Blob")
         validate_service_configuration(name, service)
 
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -67,8 +67,8 @@ module ActiveStorage
           end
         CODE
 
-        has_one :"#{name}_attachment", -> { where(name: name) }, class_name: "ActiveStorage::Attachment", as: :record, inverse_of: :record, dependent: :destroy, strict_loading: strict_loading
-        has_one :"#{name}_blob", through: :"#{name}_attachment", class_name: "ActiveStorage::Blob", source: :blob, strict_loading: strict_loading
+        has_one :"#{name}_attachment", -> { where(name: name) }, class_name: attachment_class_name, as: :record, inverse_of: :record, dependent: :destroy, strict_loading: strict_loading
+        has_one :"#{name}_blob", through: :"#{name}_attachment", class_name: blob_class_name, source: :blob, strict_loading: strict_loading
 
         scope :"with_attached_#{name}", -> { includes("#{name}_attachment": :blob) }
 
@@ -126,7 +126,7 @@ module ActiveStorage
       #     has_many_attached :photos, strict_loading: true
       #   end
       #
-      def has_many_attached(name, dependent: :purge_later, service: nil, strict_loading: false)
+      def has_many_attached(name, dependent: :purge_later, service: nil, strict_loading: false, attachment_class_name: "ActiveStorage::Attachment", blob_class_name: "ActiveStorage::Blob")
         validate_service_configuration(name, service)
 
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -153,7 +153,7 @@ module ActiveStorage
           end
         CODE
 
-        has_many :"#{name}_attachments", -> { where(name: name) }, as: :record, class_name: "ActiveStorage::Attachment", inverse_of: :record, dependent: :destroy, strict_loading: strict_loading do
+        has_many :"#{name}_attachments", -> { where(name: name) }, as: :record, class_name: attachment_class_name, inverse_of: :record, dependent: :destroy, strict_loading: strict_loading do
           def purge
             each(&:purge)
             reset
@@ -164,7 +164,7 @@ module ActiveStorage
             reset
           end
         end
-        has_many :"#{name}_blobs", through: :"#{name}_attachments", class_name: "ActiveStorage::Blob", source: :blob, strict_loading: strict_loading
+        has_many :"#{name}_blobs", through: :"#{name}_attachments", class_name: blob_class_name, source: :blob, strict_loading: strict_loading
 
         scope :"with_attached_#{name}", -> { includes("#{name}_attachments": :blob) }
 
