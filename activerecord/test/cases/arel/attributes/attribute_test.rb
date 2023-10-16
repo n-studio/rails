@@ -1067,6 +1067,27 @@ module Arel
         end
       end
 
+      describe "#asc_nulls_last" do
+        it "should create an Ascending node" do
+          relation = Table.new(:users)
+          _(relation[:id].asc_nulls_last).must_be_kind_of Nodes::Ascending
+        end
+
+        it "should create an Nulls Last node" do
+          relation = Table.new(:users)
+          _(relation[:id].asc_nulls_last).must_be_kind_of Nodes::NullsLast
+        end
+
+        it "should generate ASC NULLS LAST in sql" do
+          relation = Table.new(:users)
+          mgr = relation.project relation[:id]
+          mgr.order relation[:id].asc_nulls_last
+          _(mgr.to_sql).must_be_like %{
+            SELECT "users"."id" FROM "users" ORDER BY "users"."id" ASC NULLS LAST
+          }
+        end
+      end
+
       describe "#desc" do
         it "should create a Descending node" do
           relation = Table.new(:users)
@@ -1079,6 +1100,27 @@ module Arel
           mgr.order relation[:id].desc
           _(mgr.to_sql).must_be_like %{
             SELECT "users"."id" FROM "users" ORDER BY "users"."id" DESC
+          }
+        end
+      end
+
+      describe "#desc_nulls_first" do
+        it "should create a Descending node" do
+          relation = Table.new(:users)
+          _(relation[:id].desc_nulls_first).must_be_kind_of Nodes::Descending
+        end
+
+        it "should create a Nulls First node" do
+          relation = Table.new(:users)
+          _(relation[:id].desc_nulls_first).must_be_kind_of Nodes::NullsFirst
+        end
+
+        it "should generate DESC in sql" do
+          relation = Table.new(:users)
+          mgr = relation.project relation[:id]
+          mgr.order relation[:id].desc_nulls_first
+          _(mgr.to_sql).must_be_like %{
+            SELECT "users"."id" FROM "users" ORDER BY "users"."id" DESC NULLS FIRST
           }
         end
       end

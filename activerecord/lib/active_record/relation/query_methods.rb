@@ -1857,7 +1857,9 @@ module ActiveRecord
       end
 
       VALID_DIRECTIONS = [:asc, :desc, :ASC, :DESC,
-                          "asc", "desc", "ASC", "DESC"].to_set # :nodoc:
+                          :asc_nulls_last, :desc_nulls_first, :ASC_NULLS_LAST, :DESC_NULLS_FIRST,
+                          "asc", "desc", "ASC", "DESC",
+                          "asc_nulls_last", "desc_nulls_first", "ASC_NULLS_LAST", "DESC_NULLS_FIRST"].to_set # :nodoc:
 
       def validate_order_args(args)
         args.each do |arg|
