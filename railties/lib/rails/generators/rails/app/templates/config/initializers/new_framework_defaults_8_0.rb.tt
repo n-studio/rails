@@ -23,3 +23,7 @@
 # If set to `false` both conditions need to be satisfied.
 #++
 # Rails.application.config.action_dispatch.strict_freshness = true
+
+###
+# Determines whether the `time_ago_in_words` helper will include the prefix or suffix in the output.
+# Rails.application.config.include_prefix_or_suffix_to_time_ago_in_words = true

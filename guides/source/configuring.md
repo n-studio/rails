@@ -2319,6 +2319,11 @@ Configures the set of HTML sanitizers used by Action View by setting `ActionView
 
 NOTE: `Rails::HTML5::Sanitizer` is not supported on JRuby, so on JRuby platforms Rails will fall back to `Rails::HTML4::Sanitizer`.
 
+#### `config.action_view.include_prefix_or_suffix_to_time_ago_in_words`
+
+Determines whether the `time_ago_in_words` helper will include the prefix or suffix in the output.
+The default value is `true`.
+
 ### Configuring Action Mailbox
 
 `config.action_mailbox` provides the following configuration options:
