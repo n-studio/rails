@@ -1,3 +1,7 @@
+*   Handle `SQLite3::BusyException` to raise `ActiveRecord::Deadlocked`.
+
+    *Matthew Nguyen*
+
 ## Rails 7.2.0 (August 09, 2024) ##
 
 *   Handle commas in Sqlite3 default function definitions.
